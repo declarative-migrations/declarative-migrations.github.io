@@ -1,0 +1,158 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>declarative-migrations — dpm</title>
+<meta name="description" content="dpm: declarative, ORM-agnostic Postgres schema migration. Diff two databases, get reviewable SQL, prove convergence, countersign with seven independent tools.">
+<style>
+:root{
+  --bg:#fbfaf7; --fg:#1a1d21; --muted:#5c6470; --line:#e4e1d8;
+  --card:#ffffff; --accent:#b4552d; --accent-soft:#f4e5dc;
+  --code-bg:#14171c; --code-fg:#e7e4dc; --ok:#2b7a4b;
+  --mono:ui-monospace,'SF Mono',SFMono-Regular,Menlo,Consolas,monospace;
+}
+@media (prefers-color-scheme: dark){
+  :root{
+    --bg:#101318; --fg:#e8e6e1; --muted:#9aa3ae; --line:#262b33;
+    --card:#171c23; --accent:#e08150; --accent-soft:#2a2019;
+    --code-bg:#0b0d11; --code-fg:#dcd9d1; --ok:#5cbf85;
+  }
+}
+*{box-sizing:border-box;margin:0;padding:0}
+body{background:var(--bg);color:var(--fg);font:16px/1.65 Georgia,'Times New Roman',serif;-webkit-font-smoothing:antialiased}
+.wrap{max-width:960px;margin:0 auto;padding:0 24px}
+header{padding:72px 0 48px;border-bottom:1px solid var(--line)}
+.kicker{font-family:var(--mono);font-size:12px;letter-spacing:.14em;text-transform:uppercase;color:var(--accent);margin-bottom:18px}
+h1{font-size:clamp(30px,5vw,46px);font-weight:600;line-height:1.15;letter-spacing:-.01em;max-width:21ch}
+h1 em{font-style:italic;color:var(--accent)}
+.sub{margin-top:18px;font-size:19px;color:var(--muted);max-width:60ch}
+.cta{margin-top:28px;display:flex;gap:12px;flex-wrap:wrap}
+.btn{display:inline-block;padding:10px 18px;border-radius:8px;text-decoration:none;font-family:var(--mono);font-size:14px}
+.btn-primary{background:var(--accent);color:#fff}
+.btn-ghost{border:1px solid var(--line);color:var(--fg)}
+section{padding:52px 0;border-bottom:1px solid var(--line)}
+h2{font-size:24px;font-weight:600;margin-bottom:8px}
+.lede{color:var(--muted);margin-bottom:26px;max-width:64ch}
+pre{background:var(--code-bg);color:var(--code-fg);border-radius:10px;padding:18px 20px;overflow-x:auto;font-family:var(--mono);font-size:13.5px;line-height:1.7}
+pre .c{color:#7d8590}
+pre .k{color:#e5a458}
+code.inline{font-family:var(--mono);font-size:.88em;background:var(--accent-soft);color:var(--accent);padding:1px 6px;border-radius:5px}
+.grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(260px,1fr));gap:16px;margin-top:8px}
+.card{background:var(--card);border:1px solid var(--line);border-radius:12px;padding:20px 22px}
+.card h3{font-size:16.5px;margin-bottom:8px;font-weight:600}
+.card p{font-size:14.5px;color:var(--muted)}
+.card .mono{font-family:var(--mono);font-size:12.5px;color:var(--accent)}
+.tools{display:flex;flex-wrap:wrap;gap:10px;margin:20px 0 6px}
+.tool{font-family:var(--mono);font-size:13px;border:1px solid var(--line);background:var(--card);border-radius:999px;padding:6px 14px}
+.tool b{color:var(--ok);font-weight:600}
+table{width:100%;border-collapse:collapse;font-size:14.5px;margin-top:14px}
+.tblwrap{overflow-x:auto}
+th,td{text-align:left;padding:9px 12px;border-bottom:1px solid var(--line);vertical-align:top}
+th{font-family:var(--mono);font-size:12px;text-transform:uppercase;letter-spacing:.08em;color:var(--muted)}
+td code{font-family:var(--mono);font-size:12.5px;white-space:nowrap}
+.flow{font-family:var(--mono);font-size:13px;background:var(--card);border:1px solid var(--line);border-radius:12px;padding:18px 22px;overflow-x:auto;white-space:pre;line-height:1.9}
+footer{padding:44px 0 64px;color:var(--muted);font-size:14px}
+footer a{color:var(--accent)}
+a{color:var(--accent)}
+.num{font-family:var(--mono);color:var(--accent);font-size:13px;margin-right:6px}
+ol.steps{list-style:none;margin-top:10px}
+ol.steps li{padding:10px 0;border-bottom:1px dashed var(--line);font-size:15.5px}
+ol.steps li:last-child{border-bottom:none}
+</style>
+</head>
+<body>
+<div class="wrap">
+
+<header>
+  <div class="kicker">declarative-migrations / dpm</div>
+  <h1>The database is the schema. <em>Diff it like one.</em></h1>
+  <p class="sub">dpm is declarative, ORM-agnostic Postgres schema migration in Rust: introspect two states, diff the catalogs, emit reviewable SQL that converges one onto the other — then <strong>prove</strong> it converged, and let seven independent tools countersign the proof.</p>
+  <div class="cta">
+    <a class="btn btn-primary" href="https://github.com/declarative-migrations/declarative-postgres-migrate.rs">GitHub →</a>
+    <a class="btn btn-ghost" href="https://github.com/declarative-migrations/declarative-postgres-migrate.rs/releases">Releases</a>
+    <a class="btn btn-ghost" href="https://github.com/declarative-migrations/declarative-postgres-migrate.rs/blob/main/docs/beyond-just-schema-migrations.md">Data-migrations design</a>
+  </div>
+</header>
+
+<section>
+  <h2>Install</h2>
+  <pre><span class="c"># curl — prebuilt binary from the latest release (cargo fallback)</span>
+curl -fsSL https://raw.githubusercontent.com/declarative-migrations/declarative-postgres-migrate.rs/main/scripts/install.sh | bash
+
+<span class="c"># Homebrew</span>
+brew install declarative-migrations/tap/dpm
+
+<span class="c"># From source</span>
+cargo install --git https://github.com/declarative-migrations/declarative-postgres-migrate.rs</pre>
+</section>
+
+<section>
+  <h2>One idea, taken seriously</h2>
+  <p class="lede">The Postgres system catalogs are the neutral interchange format. Whether a schema was authored by Prisma, Drizzle, SeaORM, ent, peewee, or raw SQL — once it exists, <code class="inline">pg_catalog</code> describes it canonically. dpm deparses both sides <em>with the server itself</em> (<code class="inline">pg_get_constraintdef</code>, <code class="inline">pg_get_indexdef</code>, <code class="inline">format_type</code>, … under <code class="inline">search_path = ''</code>), so comparison is exact string equality. No regex reconciliation of hand-written SQL against Postgres' re-serialized forms.</p>
+  <pre><span class="k">dpm diff</span>   --source postgres://…/desired  --target postgres://…/live
+<span class="k">dpm verify</span> --source schema.sql --target "$DATABASE_URL" --shadow "$SHADOW_DATABASE_URL" --cross-check-all
+<span class="k">dpm apply</span>  --yes   <span class="c"># interactive confirm without --yes; destructive ops need explicit consent</span></pre>
+  <div class="grid">
+    <div class="card"><h3>Any source, any target</h3><p>Live database ↔ <span class="mono">catalog.json</span> dump ↔ <span class="mono">schema.sql</span> (or a <span class="mono">pg_dump -s</span> dump, materialized on a shadow server). All nine pairings produce byte-identical migrations — asserted in CI.</p></div>
+    <div class="card"><h3>Convergence, proven</h3><p><span class="mono">dpm verify</span> replays your target onto a throwaway replica, applies the migration, re-introspects, re-diffs. An empty plan is the proof. Exit codes made for CI.</p></div>
+    <div class="card"><h3>Destructive = two consents</h3><p><span class="mono">--allow-destructive-sql</span> to <em>generate</em> drops (otherwise commented out), <span class="mono">--allow-destructive-ops</span> to <em>execute</em> them. Apply fails closed.</p></div>
+    <div class="card"><h3>Supabase-aware</h3><p>Managed schemas excluded by default, RLS + policies are first-class diffed objects, transaction-pooler connections detected and refused with a fix hint.</p></div>
+  </div>
+</section>
+
+<section>
+  <h2>Seven tools countersign every migration</h2>
+  <p class="lede">dpm never asks you to take its word for it. Six independent diff engines must see <em>zero remaining difference</em> after dpm migrates; flyway validates the script under a standard migration runner. The test matrix runs all of them against ten schema fixtures — and it has already caught real bugs (that's the point).</p>
+  <div class="tools">
+    <span class="tool"><b>✓</b> migra</span>
+    <span class="tool"><b>✓</b> pgdiff</span>
+    <span class="tool"><b>✓</b> atlas</span>
+    <span class="tool"><b>✓</b> stripe/pg-schema-diff</span>
+    <span class="tool"><b>✓</b> liquibase</span>
+    <span class="tool"><b>✓</b> apgdiff</span>
+    <span class="tool"><b>✓</b> flyway</span>
+  </div>
+  <pre>dpm verify … <span class="k">--cross-check-all</span>            <span class="c"># every installed tool</span>
+dpm verify … <span class="k">--cross-check-with-migra --cross-check-with-atlas</span>
+dpm verify … <span class="k">--cross-check-with-ai</span>        <span class="c"># AI discrepancy scan over all reports</span></pre>
+  <p style="margin-top:14px;color:var(--muted);font-size:14.5px">The AI layer reviews migrations too — <code class="inline">dpm review</code> drives the Anthropic / OpenAI / Gemini HTTP APIs (or the claude / codex / gemini CLIs) with a fail-closed machine verdict: no parseable <code class="inline">DPM_VERDICT</code>, no approval.</p>
+</section>
+
+<section>
+  <h2>ORM-agnostic by construction</h2>
+  <div class="tblwrap"><table>
+    <tr><th>You use</th><th>dpm source</th></tr>
+    <tr><td>Drizzle</td><td><code>drizzle-kit export → schema.sql</code></td></tr>
+    <tr><td>Prisma</td><td><code>prisma migrate diff --from-empty --to-schema-datamodel --script</code></td></tr>
+    <tr><td>SeaORM / sqlx / ent / Django / Rails</td><td>migrations → scratch db → <code>--source postgres://scratch</code></td></tr>
+    <tr><td>Raw SQL</td><td>the file <em>is</em> the source</td></tr>
+  </table></div>
+  <p style="margin-top:16px;color:var(--muted)">“Diff my Drizzle app against the SeaORM service's database” is one command. dpm never parses ORM code.</p>
+</section>
+
+<section>
+  <h2>How verify works</h2>
+  <div class="flow">target db ──introspect──▶ catalog ──bootstrap──▶ throwaway replica
+                                              │ fidelity check (dpm refuses on its own coverage gaps)
+source ───introspect──▶ catalog ──diff──▶ migration SQL ──apply──▶ replica
+                                              │
+                            re-introspect ──re-diff──▶ <b>empty plan = proof</b>
+                                              │
+              migra · pgdiff · atlas · pg-schema-diff · liquibase · apgdiff · flyway
+                                              │
+                                   AI discrepancy scan (optional)</div>
+  <ol class="steps">
+    <li><span class="num">01</span>Everything is reviewable SQL — dpm never executes without explicit consent.</li>
+    <li><span class="num">02</span>Constraint adds on existing tables use <code class="inline">NOT VALID</code> + <code class="inline">VALIDATE</code>; enum values are added outside the transaction; FKs land last.</li>
+    <li><span class="num">03</span>Manual-review items (enum label removal, partition-strategy changes) are surfaced as comments, never guessed at.</li>
+  </ol>
+</section>
+
+<footer>
+  <p>MIT © Alex Mills · <a href="https://github.com/declarative-migrations">github.com/declarative-migrations</a> · schema migrations today, <a href="https://github.com/declarative-migrations/declarative-postgres-migrate.rs/blob/main/docs/beyond-just-schema-migrations.md">data migrations next</a>.</p>
+</footer>
+
+</div>
+</body>
+</html>
