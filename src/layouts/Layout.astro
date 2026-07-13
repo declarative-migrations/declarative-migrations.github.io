@@ -1,0 +1,52 @@
+---
+interface Props {
+  title: string;
+  description: string;
+}
+const { title, description } = Astro.props;
+---
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>{title}</title>
+  <meta name="description" content={description} />
+  <meta property="og:title" content={title} />
+  <meta property="og:description" content={description} />
+  <meta property="og:type" content="website" />
+  <link rel="icon" href="data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 100 100%22><text y=%22.9em%22 font-size=%2290%22>⇄</text></svg>" />
+</head>
+<body>
+  <div class="wrap">
+    <slot />
+  </div>
+</body>
+</html>
+
+<style is:global>
+:root{
+  --bg:#fbfaf7; --fg:#1a1d21; --muted:#5c6470; --line:#e4e1d8;
+  --card:#ffffff; --accent:#b4552d; --accent-soft:#f4e5dc;
+  --code-bg:#14171c; --code-fg:#e7e4dc; --ok:#2b7a4b;
+  --mono:ui-monospace,'SF Mono',SFMono-Regular,Menlo,Consolas,monospace;
+}
+@media (prefers-color-scheme: dark){
+  :root{
+    --bg:#101318; --fg:#e8e6e1; --muted:#9aa3ae; --line:#262b33;
+    --card:#171c23; --accent:#e08150; --accent-soft:#2a2019;
+    --code-bg:#0b0d11; --code-fg:#dcd9d1; --ok:#5cbf85;
+  }
+}
+*{box-sizing:border-box;margin:0;padding:0}
+body{background:var(--bg);color:var(--fg);font:16px/1.65 Georgia,'Times New Roman',serif;-webkit-font-smoothing:antialiased}
+.wrap{max-width:960px;margin:0 auto;padding:0 24px}
+a{color:var(--accent)}
+h2{font-size:24px;font-weight:600;margin-bottom:8px}
+section{padding:52px 0;border-bottom:1px solid var(--line)}
+.lede{color:var(--muted);margin-bottom:26px;max-width:64ch}
+pre{background:var(--code-bg);color:var(--code-fg);border-radius:10px;padding:18px 20px;overflow-x:auto;font-family:var(--mono);font-size:13.5px;line-height:1.7}
+pre .c{color:#7d8590}
+pre .k{color:#e5a458}
+code.inline{font-family:var(--mono);font-size:.88em;background:var(--accent-soft);color:var(--accent);padding:1px 6px;border-radius:5px}
+</style>
