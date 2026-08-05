@@ -130,7 +130,7 @@ dpm verify … <span class="k">--cross-check-with-ai</span>        <span class="
 
   <section>
     <h2>How verify works</h2>
-    <div class="flow">{`target db ──introspect──▶ catalog ──bootstrap──▶ throwaway replica
+    <div class="flow" role="img" aria-label="dpm verify data flow: the target database is introspected into a catalog and bootstrapped onto a throwaway replica (with a fidelity check that makes dpm refuse on its own coverage gaps); the source is introspected and diffed into migration SQL, which is applied to the replica; a re-introspect and re-diff yielding an empty plan is the proof of convergence, optionally countersigned by migra, pgdiff, atlas, pg-schema-diff, liquibase, apgdiff, and flyway plus an AI discrepancy scan.">{`target db ──introspect──▶ catalog ──bootstrap──▶ throwaway replica
                                               │ fidelity check (dpm refuses on its own coverage gaps)
 source ───introspect──▶ catalog ──diff──▶ migration SQL ──apply──▶ replica
                                               │

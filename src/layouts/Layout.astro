@@ -4,17 +4,45 @@ interface Props {
   description: string;
 }
 const { title, description } = Astro.props;
+
+// Canonical URL from the configured `site` + current path.
+const canonical = new URL(Astro.url.pathname, Astro.site ?? 'https://declarative-migrations.github.io').href;
+
+// Content-Security-Policy for a fully static, no-client-JS page. GitHub Pages
+// cannot set response headers, so this is delivered as a meta tag: the
+// document-level directives below are enforced; `frame-ancestors` /
+// `upgrade-insecure-requests` are header-only and intentionally omitted.
+// The page ships inline <style> blocks and a data: SVG favicon, hence
+// 'unsafe-inline' for style and data: for img — no inline or remote script is
+// allowed.
+const csp = [
+  "default-src 'self'",
+  "script-src 'self'",
+  "style-src 'self' 'unsafe-inline'",
+  "img-src 'self' data:",
+  "font-src 'self'",
+  "connect-src 'self'",
+  "base-uri 'self'",
+  "form-action 'self'",
+  "object-src 'none'",
+].join('; ');
 ---
 <!DOCTYPE html>
 <html lang="en">
 <head>
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <meta http-equiv="Content-Security-Policy" content={csp} />
+  <meta name="color-scheme" content="light dark" />
+  <meta name="theme-color" content="#fbfaf7" media="(prefers-color-scheme: light)" />
+  <meta name="theme-color" content="#101318" media="(prefers-color-scheme: dark)" />
   <title>{title}</title>
   <meta name="description" content={description} />
+  <link rel="canonical" href={canonical} />
   <meta property="og:title" content={title} />
   <meta property="og:description" content={description} />
   <meta property="og:type" content="website" />
+  <meta property="og:url" content={canonical} />
   <link rel="icon" href="data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 100 100%22><text y=%22.9em%22 font-size=%2290%22>⇄</text></svg>" />
 </head>
 <body>
