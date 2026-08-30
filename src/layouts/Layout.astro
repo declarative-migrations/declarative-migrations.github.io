@@ -46,7 +46,21 @@ const csp = [
   <link rel="icon" href="data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 100 100%22><text y=%22.9em%22 font-size=%2290%22>⇄</text></svg>" />
 </head>
 <body>
-  <div class="wrap">
+  <a class="skip-link" href="#content">Skip to content</a>
+  <header class="site-nav">
+    <div class="nav-inner">
+      <a class="nav-brand" href="/" aria-label="Declarative Migrations home"><span>⇄</span><strong>Declarative Migrations</strong></a>
+      <nav class="desktop-nav" aria-label="Primary navigation">
+        <a href="/#install">Install</a>
+        <a href="/#proof">Proof</a>
+        <a href="/#integrations">Integrations</a>
+        <a href="https://github.com/declarative-migrations">Source</a>
+      </nav>
+      <div class="account-nav"><a href="https://user.declarative-migrations.github.io/">Log in</a><a class="signup" href="https://auth.declarative-migrations.github.io/">Sign up</a></div>
+      <details class="mobile-nav"><summary>Menu</summary><nav aria-label="Mobile navigation"><a href="/#install">Install</a><a href="/#proof">Proof</a><a href="/#integrations">Integrations</a><a href="https://github.com/declarative-migrations">Source</a><a href="https://user.declarative-migrations.github.io/">Log in</a><a class="signup" href="https://auth.declarative-migrations.github.io/">Sign up</a></nav></details>
+    </div>
+  </header>
+  <div class="wrap" id="content">
     <slot />
   </div>
 </body>
@@ -70,6 +84,12 @@ const csp = [
 body{background:var(--bg);color:var(--fg);font:16px/1.65 Georgia,'Times New Roman',serif;-webkit-font-smoothing:antialiased}
 .wrap{max-width:960px;margin:0 auto;padding:0 24px}
 a{color:var(--accent)}
+.skip-link{position:fixed;left:16px;top:12px;z-index:1000;transform:translateY(-180%);padding:8px 12px;border-radius:999px;background:var(--fg);color:var(--bg);font-family:var(--mono);font-size:13px;text-decoration:none}.skip-link:focus{transform:none}
+.site-nav{position:sticky;top:0;z-index:100;padding:11px 0;border-bottom:1px solid var(--line);background:color-mix(in srgb,var(--bg) 90%,transparent);backdrop-filter:blur(16px)}
+.nav-inner{display:flex;align-items:center;gap:22px;max-width:1100px;margin:0 auto;padding:0 24px}
+.nav-brand{display:flex;align-items:center;gap:9px;margin-right:auto;color:var(--fg);font-family:var(--mono);font-size:13px;text-decoration:none}.nav-brand span{display:grid;width:30px;height:30px;place-items:center;border-radius:8px;background:var(--fg);color:var(--bg);font-size:17px}.nav-brand strong{font-weight:700}
+.desktop-nav,.account-nav{display:flex;align-items:center;gap:18px}.desktop-nav a,.account-nav>a:first-child{color:var(--fg);font-family:var(--mono);font-size:12px;text-decoration:none}.desktop-nav a:hover,.account-nav>a:first-child:hover{text-decoration:underline;text-underline-offset:4px}
+.signup{display:inline-block;padding:7px 12px;border-radius:8px;background:var(--accent);color:white;font-family:var(--mono);font-size:12px;text-decoration:none}.mobile-nav{display:none}
 h2{font-size:24px;font-weight:600;margin-bottom:8px}
 section{padding:52px 0;border-bottom:1px solid var(--line)}
 .lede{color:var(--muted);margin-bottom:26px;max-width:64ch}
@@ -77,4 +97,5 @@ pre{background:var(--code-bg);color:var(--code-fg);border-radius:10px;padding:18
 pre .c{color:#7d8590}
 pre .k{color:#e5a458}
 code.inline{font-family:var(--mono);font-size:.88em;background:var(--accent-soft);color:var(--accent);padding:1px 6px;border-radius:5px}
+@media(max-width:780px){.desktop-nav,.account-nav{display:none}.mobile-nav{display:block}.mobile-nav summary{padding:7px 12px;border:1px solid var(--line);border-radius:8px;font-family:var(--mono);font-size:12px;list-style:none;cursor:pointer}.mobile-nav[open] nav{position:absolute;top:calc(100% + 6px);right:16px;left:16px;display:grid;gap:5px;padding:12px;border:1px solid var(--line);border-radius:10px;background:var(--fg);box-shadow:0 24px 60px #0005}.mobile-nav nav a{padding:9px;color:var(--bg);font-family:var(--mono);font-size:13px;text-decoration:none}.mobile-nav nav .signup{background:var(--accent);color:white;text-align:center}}
 </style>

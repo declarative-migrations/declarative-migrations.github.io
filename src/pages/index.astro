@@ -41,7 +41,7 @@ const steps = [
   title="declarative-migrations — dpm"
   description="dpm: declarative, ORM-agnostic Postgres schema migration. Diff two databases, get reviewable SQL, prove convergence, countersign with seven independent tools."
 >
-  <header>
+  <section class="hero">
     <div class="kicker">declarative-migrations / dpm</div>
     <h1>The database is the schema. <em>Diff it like one.</em></h1>
     <p class="sub">
@@ -54,9 +54,9 @@ const steps = [
       <a class="btn btn-ghost" href={`${repo}/releases`}>Releases</a>
       <a class="btn btn-ghost" href={`${repo}/blob/main/docs/beyond-just-schema-migrations.md`}>Data-migrations design</a>
     </div>
-  </header>
+  </section>
 
-  <section>
+  <section id="install">
     <h2>Install</h2>
     <pre><span class="c"># curl — prebuilt binary from the latest release (cargo fallback)</span>
 curl -fsSL https://raw.githubusercontent.com/declarative-migrations/declarative-postgres-migrate.rs/main/scripts/install.sh | bash
@@ -68,7 +68,7 @@ brew install declarative-migrations/tap/dpm
 cargo install --git {repo}</pre>
   </section>
 
-  <section>
+  <section id="engine">
     <h2>One idea, taken seriously</h2>
     <p class="lede">
       The Postgres system catalogs are the neutral interchange format. Whether a schema was authored
@@ -92,7 +92,7 @@ cargo install --git {repo}</pre>
     </div>
   </section>
 
-  <section>
+  <section id="proof">
     <h2>Seven tools countersign every migration</h2>
     <p class="lede">
       dpm never asks you to take its word for it. Six independent diff engines must see
@@ -113,7 +113,7 @@ dpm verify … <span class="k">--cross-check-with-ai</span>        <span class="
     </p>
   </section>
 
-  <section>
+  <section id="integrations">
     <h2>ORM-agnostic by construction</h2>
     <div class="tblwrap">
       <table>
@@ -128,7 +128,7 @@ dpm verify … <span class="k">--cross-check-with-ai</span>        <span class="
     </p>
   </section>
 
-  <section>
+  <section id="how-it-works">
     <h2>How verify works</h2>
     <div class="flow" role="img" aria-label="dpm verify data flow: the target database is introspected into a catalog and bootstrapped onto a throwaway replica (with a fidelity check that makes dpm refuse on its own coverage gaps); the source is introspected and diffed into migration SQL, which is applied to the replica; a re-introspect and re-diff yielding an empty plan is the proof of convergence, optionally countersigned by migra, pgdiff, atlas, pg-schema-diff, liquibase, apgdiff, and flyway plus an AI discrepancy scan.">{`target db ──introspect──▶ catalog ──bootstrap──▶ throwaway replica
                                               │ fidelity check (dpm refuses on its own coverage gaps)
@@ -158,7 +158,7 @@ source ───introspect──▶ catalog ──diff──▶ migration SQL �
 </Layout>
 
 <style>
-header{padding:72px 0 48px;border-bottom:1px solid var(--line)}
+.hero{padding:72px 0 48px;border-bottom:1px solid var(--line)}
 .kicker{font-family:var(--mono);font-size:12px;letter-spacing:.14em;text-transform:uppercase;color:var(--accent);margin-bottom:18px}
 h1{font-size:clamp(30px,5vw,46px);font-weight:600;line-height:1.15;letter-spacing:-.01em;max-width:21ch}
 h1 em{font-style:italic;color:var(--accent)}
