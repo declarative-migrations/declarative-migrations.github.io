@@ -1,4 +1,6 @@
 ---
+import AnnouncementBar from '../components/AnnouncementBar.astro';
+
 interface Props {
   title: string;
   description: string;
@@ -47,6 +49,13 @@ const csp = [
 </head>
 <body>
   <a class="skip-link" href="#content">Skip to content</a>
+  <AnnouncementBar
+    storageKey="site-announcement:declarative-migrations:v1"
+    message="Happy 2026, y’all!"
+    href="https://github.com/declarative-migrations"
+    linkLabel="See what we’re building"
+    tone="rust"
+  />
   <header class="site-nav">
     <div class="nav-inner">
       <a class="nav-brand" href="/" aria-label="Declarative Migrations home"><span>⇄</span><strong>Declarative Migrations</strong></a>
