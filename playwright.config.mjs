@@ -2,8 +2,9 @@ import { defineConfig, devices } from '@playwright/test';
 
 // Browser-automation tests run against the *built* site served by `astro
 // preview` (production output, not the dev server) so what CI verifies is what
-// GitHub Pages ships. The webServer builds first, then previews on 4321.
-const PORT = 4321;
+// GitHub Pages ships. Use an isolated port so an unrelated local Astro server
+// can never turn a green product test into a test of the wrong website.
+const PORT = Number(process.env.PLAYWRIGHT_PORT ?? 4371);
 
 export default defineConfig({
   testDir: './tests',
@@ -22,7 +23,7 @@ export default defineConfig({
   webServer: {
     command: `npm run build && npm run preview -- --port ${PORT} --host`,
     url: `http://localhost:${PORT}/`,
-    reuseExistingServer: !process.env.CI,
+    reuseExistingServer: false,
     timeout: 120_000,
   },
 });
