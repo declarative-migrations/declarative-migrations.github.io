@@ -116,3 +116,16 @@ test('dark mode applies the dark background', async ({ browser }) => {
   expect(bg).toBe('rgb(16, 19, 24)');
   await ctx.close();
 });
+
+test('safe rollout section distinguishes plan, shadow verification, approval and apply', async ({ page }) => {
+  await page.goto('/');
+  const section = page.locator('#safe-rollout');
+  await expect(section.getByRole('heading', { name: /safer plan/i })).toBeVisible();
+  const steps = section.locator('ol li');
+  await expect(steps).toHaveCount(4);
+  for (const label of ['Plan:', 'Verify:', 'Approve:', 'Apply:']) {
+    await expect(section.getByText(label, { exact: false })).toBeVisible();
+  }
+  await expect(section).toContainText('Partial DDL failures');
+  await expect(section).toContainText('re-introspect');
+});

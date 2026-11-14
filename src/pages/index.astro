@@ -68,6 +68,18 @@ brew install declarative-migrations/tap/dpm
 cargo install --git {repo}</pre>
   </section>
 
+  <section id="safe-rollout" aria-labelledby="safe-rollout-title">
+    <h2 id="safe-rollout-title">A safer plan → verify → apply workflow</h2>
+    <p>Start with a reviewed, non-production target and a disposable shadow database. Do not interpret a generated script as permission to execute it.</p>
+    <ol>
+      <li><strong>Plan:</strong> diff the source and target catalog; inspect every statement and destructive warning.</li>
+      <li><strong>Verify:</strong> replay against a disposable shadow database and require an empty post-apply diff before considering promotion.</li>
+      <li><strong>Approve:</strong> record the exact source revision, plan digest, peer schema evidence, operator approval and recovery procedure.</li>
+      <li><strong>Apply:</strong> execute only the reviewed plan with explicit operational consent, then re-introspect the real target and compare again.</li>
+    </ol>
+    <p>Partial DDL failures may leave durable changes. Re-introspect before retrying; do not assume an automatic rollback restored the catalog.</p>
+  </section>
+
   <section id="engine">
     <h2>One idea, taken seriously</h2>
     <p class="lede">
